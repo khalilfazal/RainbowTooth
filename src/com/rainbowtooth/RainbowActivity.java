@@ -37,9 +37,16 @@ public class RainbowActivity extends Activity {
         // Run after views get measured
         this.rainbowView.post(new AsyncDrawRainbow(this, this.rainbowView) {
             @Override
-            protected void onPostExecute(final Bitmap rainbow) {
+            protected void onPostExecute(final Void v) {
+
+                // Dismiss the progress bar
                 this.progressBar.dismiss();
-                RainbowActivity.this.setRainbow(rainbow);
+
+                // Set up the UI
+                RainbowActivity.this.setRainbow(this.rainbow);
+
+                // Save the rainbow
+                new SaveThread(this).start();
             }
         });
     }

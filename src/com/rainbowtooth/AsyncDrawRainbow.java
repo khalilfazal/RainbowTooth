@@ -14,12 +14,27 @@ import android.view.View;
  * 
  * @author Khalil Fazal
  */
-public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Bitmap> implements Runnable {
+public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Void> implements Runnable {
 
     /**
      * Where the rainbow is going to be drawn in
      */
     private final View view;
+
+    /**
+     * The desired file name
+     */
+    private String fname;
+
+    /**
+     * The bitmap of the created rainbow
+     */
+    protected Bitmap rainbow;
+
+    /**
+     * Whether the file needs to be updated
+     */
+    private boolean updateFile;
 
     /**
      * Set up the context of the drawing
@@ -46,7 +61,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Bi
      * @see android.os.AsyncTask#doInBackground(Integer[])
      */
     @Override
-    protected Bitmap doInBackground(final Integer... params) {
+    protected Void doInBackground(final Integer... params) {
         this.progressBar.setMax(params[1]);
         return this.getRainbow(params[0], params[1]);
     }
@@ -59,31 +74,24 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Bi
     * @param height the height of the rainbow
     * @return the rainbow as a bitmap
     */
-    private Bitmap getRainbow(final int width, final int height) {
-        this.progressBar.setIndeterminate(true);
-        final String fname = String.format(Locale.CANADA, "%d_%d.webp", width, height);
-        Bitmap rainbow = null;
+    private Void getRainbow(final int width, final int height) {
+
+        // Set the desired file name
+        this.fname = String.format(Locale.CANADA, "%d_%d.webp", width, height);
 
         try {
-            rainbow = BitmapFactory.decodeStream(this.ctx.openFileInput(fname));
+            this.rainbow = BitmapFactory.decodeStream(this.ctx.openFileInput(this.fname));
 
-            if (rainbow == null) {
+            if (this.rainbow == null) {
                 // The bitmap couldn't be decoded, so create a new one
                 throw new FileNotFoundException();
             }
         } catch (final FileNotFoundException e) {
-            this.progressBar.setIndeterminate(false);
-            rainbow = this.drawHSLRainbow(width, height);
-            this.progressBar.setIndeterminate(true);
-
-            try {
-                rainbow.compress(Bitmap.CompressFormat.WEBP, 100, this.ctx.openFileOutput(fname, Context.MODE_PRIVATE));
-            } catch (final FileNotFoundException message) {
-                Log.e(this.getName(), "exception", message);
-            }
+            this.updateFile = true;
+            this.rainbow = this.drawHSLRainbow(width, height);
         }
 
-        return rainbow;
+        return null;
     }
 
     /**
@@ -115,10 +123,23 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Bi
     }
 
     /**
+     * Save the bitmap to a file
+     */
+    protected void saveImage() {
+        if (this.updateFile) {
+            try {
+                this.rainbow.compress(Bitmap.CompressFormat.WEBP, 100, this.ctx.openFileOutput(this.fname, Context.MODE_PRIVATE));
+            } catch (final FileNotFoundException message) {
+                Log.e(this.getName(), "exception", message);
+            }
+        }
+    }
+
+    /**
      * Handle the bitmap
      * 
      * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
      */
     @Override
-    protected abstract void onPostExecute(final Bitmap rainbow);
+    protected abstract void onPostExecute(final Void v);
 }
