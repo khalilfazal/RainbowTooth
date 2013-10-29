@@ -9,9 +9,10 @@ import android.os.AsyncTask;
  * Asynchronously perform a task with a progress bar
  * 
  * @author Khalil Fazal
+ * @param <Params> The type of arguments sent to the task on execution
  * @param <Result> The type of the result
  */
-public abstract class AbstractAsyncProgress<Result> extends AsyncTask<Integer, Integer, Result> {
+public abstract class AbstractAsyncProgress<Params, Result> extends AsyncTask<Params, Integer, Result> {
 
     /**
      * Where the task is being done
@@ -71,6 +72,14 @@ public abstract class AbstractAsyncProgress<Result> extends AsyncTask<Integer, I
     }
 
     /**
+     * Start the drawing
+     * 
+     * @see android.os.AsyncTask#doInBackground(java.lang.Object[])
+     */
+    @Override
+    protected abstract Result doInBackground(final Params... params);
+
+    /**
      * Update the progress bar
      * 
      * @see android.os.AsyncTask#onProgressUpdate(java.lang.Integer[])
@@ -79,4 +88,12 @@ public abstract class AbstractAsyncProgress<Result> extends AsyncTask<Integer, I
     protected void onProgressUpdate(final Integer... progress) {
         this.progressBar.setProgress(progress[0]);
     }
+
+    /**
+     * Handle the bitmap
+     * 
+     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+     */
+    @Override
+    protected abstract void onPostExecute(final Result rainbow);
 }
