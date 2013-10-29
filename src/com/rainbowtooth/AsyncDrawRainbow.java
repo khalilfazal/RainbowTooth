@@ -14,7 +14,7 @@ import android.view.View;
  * 
  * @author Khalil Fazal
  */
-public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Bitmap> implements Runnable {
+public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Bitmap> implements Runnable {
 
     /**
      * Where the rainbow is going to be drawn in
@@ -71,7 +71,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Bitmap> imp
                 throw new FileNotFoundException();
             }
         } catch (final FileNotFoundException e) {
-            rainbow = Bitmap.createBitmap(this.drawHSLRainbow(width, height), width, height, Bitmap.Config.ARGB_8888);
+            rainbow = this.drawHSLRainbow(width, height);
 
             try {
                 rainbow.compress(Bitmap.CompressFormat.WEBP, 100, this.ctx.openFileOutput(fname, Context.MODE_PRIVATE));
@@ -94,7 +94,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Bitmap> imp
      * @param verticalPixels number of vertical pixels
      * @return the colours
      */
-    private int[] drawHSLRainbow(final int horizontalPixels, final int verticalPixels) {
+    private Bitmap drawHSLRainbow(final int horizontalPixels, final int verticalPixels) {
         final int[] colours = new int[horizontalPixels * verticalPixels];
 
         for (int i = 0; i < verticalPixels; i++) {
@@ -108,7 +108,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Bitmap> imp
             }
         }
 
-        return colours;
+        return Bitmap.createBitmap(colours, horizontalPixels, verticalPixels, Bitmap.Config.ARGB_8888);
     }
 
     /**
