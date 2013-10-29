@@ -35,7 +35,7 @@ public class RainbowActivity extends Activity {
         this.rainbowView = (ImageView) this.findViewById(R.id.rainbow);
 
         // Run after views get measured
-        this.rainbowView.post(new AsyncDrawRainbow(this, this.rainbowView) {
+        this.rainbowView.post(new AsyncDrawRainbow(this.rainbowView) {
             @Override
             protected void onPostExecute(final Void v) {
 

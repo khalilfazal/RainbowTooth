@@ -68,8 +68,15 @@ public abstract class AbstractAsyncProgress<Params, Result> extends AsyncTask<Pa
      */
     @Override
     protected void onPreExecute() {
-        this.progressBar.show();
+        if (this.showProgress()) {
+            this.progressBar.show();
+        }
     }
+
+    /**
+     * @return Whether to show the progress bar
+     */
+    protected abstract boolean showProgress();
 
     /**
      * Start the drawing
