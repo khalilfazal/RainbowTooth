@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RainbowTooth</string>
+    <string name="progressTitle">Drawing</string>
+    <string name="rainbowDesc">HSL Rainbow</string>
+    <string name="placeholder"> </string>
+    <string name="empty"></string>
+    <string name="format" formatted="false">%03d %03d %03d</string>
+</resources>
