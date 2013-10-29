@@ -14,7 +14,7 @@ import android.widget.TextView;
  */
 public class RainbowActivity extends Activity {
 
-    /** 
+    /**
      * The rainbow
      */
     private ImageView rainbowView;
@@ -44,9 +44,6 @@ public class RainbowActivity extends Activity {
 
                 // Set up the UI
                 RainbowActivity.this.setRainbow(this.rainbow);
-
-                // Save the rainbow
-                new SaveThread(this).start();
             }
         });
     }

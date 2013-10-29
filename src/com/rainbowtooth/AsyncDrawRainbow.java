@@ -63,7 +63,12 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     @Override
     protected Void doInBackground(final Integer... params) {
         this.progressBar.setMax(params[1]);
-        return this.getRainbow(params[0], params[1]);
+        this.getRainbow(params[0], params[1]);
+
+        // Save the rainbow
+        new SaveThread(this).start();
+
+        return null;
     }
 
     /**
@@ -72,9 +77,8 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     * 
     * @param width the width of the rainbow
     * @param height the height of the rainbow
-    * @return the rainbow as a bitmap
     */
-    private Void getRainbow(final int width, final int height) {
+    private void getRainbow(final int width, final int height) {
 
         // Set the desired file name
         this.fname = String.format(Locale.CANADA, "%d_%d.webp", width, height);
@@ -90,8 +94,6 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
             this.updateFile = true;
             this.rainbow = this.drawHSLRainbow(width, height);
         }
-
-        return null;
     }
 
     /**
