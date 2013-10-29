@@ -62,13 +62,20 @@ public abstract class AbstractAsyncProgress<Params, Result> extends AsyncTask<Pa
     }
 
     /**
+     * @return Whether to show the progress bar
+     */
+    protected abstract boolean showProgress();
+
+    /**
      * Show the progress bar
      * 
      * @see android.os.AsyncTask#onPreExecute()
      */
     @Override
     protected void onPreExecute() {
-        this.progressBar.show();
+        if (this.showProgress()) {
+            this.progressBar.show();
+        }
     }
 
     /**
