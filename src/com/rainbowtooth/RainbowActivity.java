@@ -1,6 +1,7 @@
 package com.rainbowtooth;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View.OnTouchListener;
@@ -20,6 +21,11 @@ public class RainbowActivity extends Activity {
     private ImageView rainbowView;
 
     /**
+     * Shows the progress of the task
+     */
+    protected ProgressDialog progressBar;
+
+    /**
      * Create the Rainbow Activity
      * 
      * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -34,18 +40,38 @@ public class RainbowActivity extends Activity {
         // Get the image view
         this.rainbowView = (ImageView) this.findViewById(R.id.rainbow);
 
+        // Create the progress bar
+        this.progressBar = new ProgressDialog(this);
+        this.progressBar.setTitle(R.string.progressTitle);
+        this.progressBar.setIndeterminate(false);
+        this.progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
         // Run after views get measured
-        this.rainbowView.post(new AsyncDrawRainbow(this.rainbowView) {
+        this.rainbowView.post(new AsyncDrawRainbow(this.rainbowView, this.progressBar) {
             @Override
             protected void onPostExecute(final Void v) {
-
-                // Dismiss the progress bar
-                this.progressBar.dismiss();
-
-                // Set up the UI
-                RainbowActivity.this.setRainbow(this.rainbow);
+                if (RainbowActivity.this.progressBar != null) {
+                    // Set up the UI
+                    RainbowActivity.this.setRainbow(this.rainbow);
+                }
             }
         });
+    }
+
+    /**
+     * Dismiss the progress bar on rotate
+     * 
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (this.progressBar != null) {
+            this.progressBar.dismiss();
+        }
+
+        this.progressBar = null;
     }
 
     /**
@@ -55,6 +81,9 @@ public class RainbowActivity extends Activity {
      * @param rainbow The rainbow that needs to be setup
      */
     protected void setRainbow(final Bitmap rainbow) {
+        // Dismiss the progress bar
+        this.progressBar.dismiss();
+
         // Set the rainbow image
         this.rainbowView.setImageBitmap(rainbow);
 

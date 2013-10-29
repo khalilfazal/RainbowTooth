@@ -33,15 +33,13 @@ public abstract class AbstractAsyncProgress<Params, Result> extends AsyncTask<Pa
      * Set up the context
      * 
      * @param ctx The context for the drawing
+     * @param progress shows the progress of the task
      */
-    public AbstractAsyncProgress(final Context ctx) {
+    public AbstractAsyncProgress(final Context ctx, final ProgressDialog progress) {
         this.ctx = ctx;
         this.resource = ctx.getResources();
-        this.progressBar = new ProgressDialog(this.ctx);
-        this.progressBar.setTitle(R.string.progressTitle);
-        this.progressBar.setIndeterminate(false);
+        this.progressBar = progress;
         this.progressBar.setProgressNumberFormat(this.getText(R.string.empty));
-        this.progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
     }
 
     /**

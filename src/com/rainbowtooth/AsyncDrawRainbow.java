@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,19 +24,14 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     private final View view;
 
     /**
-     * The desired file name
-     */
-    private String fname;
-
-    /**
-     * True if we need to make a new file
-     */
-    private boolean newImage;
-
-    /**
      * The bitmap of the created rainbow
      */
     protected Bitmap rainbow;
+
+    /**
+     * The desired file name
+     */
+    private String fname;
 
     /**
      * Used if a new image needs to be created
@@ -43,12 +39,18 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     private FileInputStream file;
 
     /**
+     * True if we need to make a new file
+     */
+    private boolean newImage;
+
+    /**
      * Set up the context of the drawing
      * 
      * @param view Where the rainbow is going to be contained in
+     * @param progress Shows the progress of the task
      */
-    public AsyncDrawRainbow(final View view) {
-        super(view.getContext());
+    public AsyncDrawRainbow(final View view, final ProgressDialog progress) {
+        super(view.getContext(), progress);
         this.view = view;
     }
 
@@ -146,6 +148,14 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     }
 
     /**
+     * Handle the bitmap
+     * 
+     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+     */
+    @Override
+    protected abstract void onPostExecute(final Void v);
+
+    /**
      * Save the bitmap to a file
      */
     protected void saveImage() {
@@ -157,12 +167,4 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
             }
         }
     }
-
-    /**
-     * Handle the bitmap
-     * 
-     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-     */
-    @Override
-    protected abstract void onPostExecute(final Void v);
 }
