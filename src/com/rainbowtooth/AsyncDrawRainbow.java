@@ -60,6 +60,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Bi
     * @return the rainbow as a bitmap
     */
     private Bitmap getRainbow(final int width, final int height) {
+        this.progressBar.setIndeterminate(true);
         final String fname = String.format(Locale.CANADA, "%d_%d.webp", width, height);
         Bitmap rainbow = null;
 
@@ -71,7 +72,9 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Bi
                 throw new FileNotFoundException();
             }
         } catch (final FileNotFoundException e) {
+            this.progressBar.setIndeterminate(false);
             rainbow = this.drawHSLRainbow(width, height);
+            this.progressBar.setIndeterminate(true);
 
             try {
                 rainbow.compress(Bitmap.CompressFormat.WEBP, 100, this.ctx.openFileOutput(fname, Context.MODE_PRIVATE));
