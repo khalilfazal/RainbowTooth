@@ -49,7 +49,7 @@ public abstract class AbstractAsyncProgress<Result> extends AsyncTask<Integer, I
      * @param id the string's id
      * @return the string
      */
-    protected String getText(final int id) {
+    private String getText(final int id) {
         return this.resource.getText(id).toString();
     }
 
