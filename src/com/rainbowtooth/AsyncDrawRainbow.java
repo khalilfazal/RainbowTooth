@@ -1,9 +1,7 @@
 package com.rainbowtooth;
 
 import java.io.FileNotFoundException;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,22 +15,6 @@ import android.view.View;
  * @author Khalil Fazal
  */
 public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Void> implements Runnable {
-
-    /**
-     * A set of seen dimensions
-     */
-    private static Set<String> seen = new HashSet<String>();
-
-    /**
-     * Get the filename of the image
-     * 
-     * @param width the width of the image
-     * @param height the height of the image
-     * @return the filename
-     */
-    private static String getFileName(final int width, final int height) {
-        return String.format(Locale.CANADA, "%d_%d.webp", width, height);
-    }
 
     /**
      * Where the rainbow is going to be drawn in
@@ -50,9 +32,9 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     protected Bitmap rainbow;
 
     /**
-     * Whether a new image needs to be made
+     * Whether the file needs to be updated
      */
-    private boolean newImage;
+    private boolean updateFile;
 
     /**
      * Set up the context of the drawing
@@ -70,20 +52,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
      */
     @Override
     public void run() {
-        final int width = this.view.getMeasuredWidth();
-        final int height = this.view.getMeasuredHeight();
-        this.fname = getFileName(width, height);
-
-        this.execute(width, height);
-    }
-
-    /**
-     * @see com.rainbowtooth.AbstractAsyncProgress#showProgress()
-     */
-    @Override
-    protected boolean showProgress() {
-        this.newImage = seen.contains(this.fname);
-        return !this.newImage;
+        this.execute(this.view.getMeasuredWidth(), this.view.getMeasuredHeight());
     }
 
     /**
@@ -110,6 +79,10 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     * @param height the height of the rainbow
     */
     private void getRainbow(final int width, final int height) {
+
+        // Set the desired file name
+        this.fname = String.format(Locale.CANADA, "%d_%d.webp", width, height);
+
         try {
             this.rainbow = BitmapFactory.decodeStream(this.ctx.openFileInput(this.fname));
 
@@ -118,8 +91,8 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
                 throw new FileNotFoundException();
             }
         } catch (final FileNotFoundException e) {
+            this.updateFile = true;
             this.rainbow = this.drawHSLRainbow(width, height);
-            seen.add(this.fname);
         }
     }
 
@@ -155,7 +128,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
      * Save the bitmap to a file
      */
     protected void saveImage() {
-        if (this.newImage) {
+        if (this.updateFile) {
             try {
                 this.rainbow.compress(Bitmap.CompressFormat.WEBP, 100, this.ctx.openFileOutput(this.fname, Context.MODE_PRIVATE));
             } catch (final FileNotFoundException message) {
