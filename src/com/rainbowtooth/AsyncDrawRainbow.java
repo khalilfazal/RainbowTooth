@@ -116,7 +116,17 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     * @param height the height of the rainbow
     */
     private void getRainbow(final int width, final int height) {
-        this.rainbow = this.newImage ? this.drawHSLRainbow(width, height) : BitmapFactory.decodeStream(this.file);
+        if (this.newImage) {
+            this.rainbow = this.drawHSLRainbow(width, height);
+        } else {
+            final BitmapFactory.Options attributes = new BitmapFactory.Options();
+            this.rainbow = BitmapFactory.decodeStream(this.file, null, attributes);
+
+            if (attributes.outWidth != width || attributes.outHeight != height) {
+                this.rainbow = this.drawHSLRainbow(width, height);
+                this.newImage = true;
+            }
+        }
     }
 
     /**
