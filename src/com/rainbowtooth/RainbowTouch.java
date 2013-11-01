@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.MotionEvent;
@@ -20,9 +21,9 @@ import android.widget.TextView.BufferType;
 public class RainbowTouch implements OnTouchListener {
 
     /**
-     * The string's format
+     * Where to show the selected colour
      */
-    private final String format;
+    private final TextView message;
 
     /**
      * A (Point -> Colour) map
@@ -30,18 +31,32 @@ public class RainbowTouch implements OnTouchListener {
     private final Bitmap rainbow;
 
     /**
-     * Where to show the selected colour
+     * The string's format
      */
-    private final TextView message;
+    private final String format;
+
+    /**
+     * Must be redrawn when it's colour changes
+     */
+    private final View border;
+
+    /**
+     * The boarder's painter
+     */
+    private final Paint paint;
 
     /**
      * @param message Where to display the colour of the touched pixel
-     * @param rainbow the bitmap used to find colors of pixels
+     * @param rainbow The bitmap used to find colors of pixels    
+     * @param border that must be redrawn when it's colour changes
+     * @param paint the boarder's painter
      */
-    public RainbowTouch(final TextView message, final Bitmap rainbow) {
+    public RainbowTouch(final TextView message, final Bitmap rainbow, final View border, final Paint paint) {
         this.message = message;
         this.rainbow = rainbow;
         this.format = message.getContext().getResources().getText(R.string.format).toString();
+        this.border = border;
+        this.paint = paint;
     }
 
     /** 
@@ -51,6 +66,12 @@ public class RainbowTouch implements OnTouchListener {
     public boolean onTouch(final View v, final MotionEvent event) {
         try {
             final int pixel = this.rainbow.getPixel((int) event.getX(), (int) event.getY());
+
+            // Set the border's colour
+            this.paint.setColor(pixel);
+
+            // Redraw the border
+            this.border.invalidate();
 
             final int red = Color.red(pixel);
             final int green = Color.green(pixel);

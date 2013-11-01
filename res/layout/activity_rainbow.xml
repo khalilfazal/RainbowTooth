@@ -20,4 +20,11 @@
         android:layout_centerHorizontal="true"
         android:text="@string/placeholder" />
 
+    <com.rainbowtooth.EmptyView
+        android:id="@+id/border"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/rainbow" />
+
 </RelativeLayout>

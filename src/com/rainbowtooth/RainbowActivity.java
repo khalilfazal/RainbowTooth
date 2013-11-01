@@ -3,7 +3,10 @@ package com.rainbowtooth;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -90,7 +93,20 @@ public class RainbowActivity extends Activity {
         // Get the TextView for where the touched colour should appear
         final TextView message = (TextView) this.findViewById(R.id.message);
 
+        // Create a new background
+        final ShapeDrawable background = new ShapeDrawable();
+
+        // Initialize the paint
+        final Paint paint = background.getPaint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(2);
+        paint.setColor(0x00000000);
+
+        // Set the empty view's background
+        final View border = this.findViewById(R.id.border);
+        border.setBackground(background);
+
         // Set the rainbow touch listener
-        this.rainbowView.setOnTouchListener(new RainbowTouch(message, rainbow));
+        this.rainbowView.setOnTouchListener(new RainbowTouch(message, rainbow, border, paint));
     }
 }
