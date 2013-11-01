@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/placeholder" />
 
-    <com.rainbowtooth.EmptyView
+    <View
         android:id="@+id/border"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
