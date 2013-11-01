@@ -144,7 +144,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
         final int[] colours = new int[horizontalPixels * verticalPixels];
 
         for (int i = 0; i < verticalPixels; i++) {
-            final float lightness = (float) (verticalPixels - i) / verticalPixels;
+            final float lightness = i < 30 ? 1 : (float) (verticalPixels - i) / verticalPixels;
 
             this.publishProgress(i + 1);
 
