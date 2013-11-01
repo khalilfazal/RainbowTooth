@@ -99,7 +99,7 @@ public class RainbowActivity extends Activity {
         // Initialize the paint
         final Paint paint = background.getPaint();
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(2);
+        paint.setStrokeWidth(5);
         paint.setColor(0x00000000);
 
         // Set the empty view's background
