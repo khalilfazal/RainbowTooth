@@ -89,6 +89,9 @@ public class RainbowTouch implements OnTouchListener, Streamer {
             // Set the border's colour
             this.paint.setColor(pixel);
 
+            // Redraw the border
+            this.border.invalidate();
+
             // Send the colour to the device
             if (this.socketStream != null) {
                 try {
@@ -97,9 +100,6 @@ public class RainbowTouch implements OnTouchListener, Streamer {
                     this.socketStream.write(buffer.array());
                 } catch (final IOException e) {}
             }
-
-            // Redraw the border
-            this.border.invalidate();
 
             final int red = Color.red(pixel);
             final int green = Color.green(pixel);
