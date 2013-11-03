@@ -7,6 +7,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
@@ -122,5 +123,20 @@ public class RainbowActivity extends ActionBarActivity {
         this.getMenuInflater().inflate(R.menu.bluetooth, menu);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * Action on menu selection
+     * 
+     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+     */
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.connect:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
