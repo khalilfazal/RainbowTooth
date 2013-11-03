@@ -1,11 +1,17 @@
 package com.rainbowtooth;
 
+import java.util.Set;
+
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +24,12 @@ import android.widget.TextView;
  * 
  * @author Khalil Fazal
  */
-public class RainbowActivity extends ActionBarActivity {
+public class RainbowActivity extends ActionBarActivity implements BluetoothBinder {
+
+    /**
+     * Request code to enable Bluetooth.
+     */
+    private static final int RQ_ENABLE_BLUETOOTH = 0;
 
     /**
      * The rainbow
@@ -31,6 +42,23 @@ public class RainbowActivity extends ActionBarActivity {
     protected ProgressDialog progressBar;
 
     /**
+     * The default Bluetooth Adapter.
+     */
+    private final BluetoothAdapter adapter;
+
+    /**
+     * The rainbow that will be shown to the user
+     */
+    protected Bitmap rainbow;
+
+    /**
+     * Construct the activity
+     */
+    public RainbowActivity() {
+        this.adapter = BluetoothAdapter.getDefaultAdapter();
+    }
+
+    /**
      * Create the Rainbow Activity
      * 
      * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -39,44 +67,32 @@ public class RainbowActivity extends ActionBarActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Inflate the layout
-        this.setContentView(R.layout.activity_rainbow);
+        // If there is no adapter, close the Application gracefully.
+        if (this.adapter == null) {
+            this.finish();
+        } else {
+            // Inflate the layout
+            this.setContentView(R.layout.activity_rainbow);
 
-        // Get the image view
-        this.rainbowView = (ImageView) this.findViewById(R.id.rainbow);
+            // Get the image view
+            this.rainbowView = (ImageView) this.findViewById(R.id.rainbow);
 
-        // Create the progress bar
-        this.progressBar = new ProgressDialog(this);
-        this.progressBar.setTitle(R.string.progressTitle);
-        this.progressBar.setIndeterminate(false);
-        this.progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            // Create the progress bar
+            this.progressBar = new ProgressDialog(this);
+            this.progressBar.setTitle(R.string.progressTitle);
+            this.progressBar.setIndeterminate(false);
+            this.progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
-        // Run after views get measured
-        this.rainbowView.post(new AsyncDrawRainbow(this.rainbowView, this.progressBar) {
-            @Override
-            protected void onPostExecute(final Void v) {
-                if (RainbowActivity.this.progressBar != null) {
-                    // Set up the UI
-                    RainbowActivity.this.setRainbow(this.rainbow);
+            // Run after views get measured
+            this.rainbowView.post(new AsyncDrawRainbow(this.rainbowView, this.progressBar) {
+                @Override
+                protected void onPostExecute(final Void v) {
+                    if (RainbowActivity.this.progressBar != null) {
+                        RainbowActivity.this.setRainbow(this.rainbow);
+                    }
                 }
-            }
-        });
-    }
-
-    /**
-     * Dismiss the progress bar on rotate
-     * 
-     * @see android.app.Activity#onPause()
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if (this.progressBar != null) {
-            this.progressBar.dismiss();
+            });
         }
-
-        this.progressBar = null;
     }
 
     /**
@@ -113,6 +129,22 @@ public class RainbowActivity extends ActionBarActivity {
     }
 
     /**
+     * Dismiss the progress bar on rotate
+     * 
+     * @see android.app.Activity#onPause()
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (this.progressBar != null) {
+            this.progressBar.dismiss();
+        }
+
+        this.progressBar = null;
+    }
+
+    /**
      * Create the bluetooth menu
      * 
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
@@ -134,9 +166,63 @@ public class RainbowActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.connect:
+                if (!this.adapter.isEnabled()) {
+                    final Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    this.startActivityForResult(intent, RQ_ENABLE_BLUETOOTH);
+                } else {
+                    this.showDeviceDialog();
+                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Called when an {@link Intent} returns to the Application.
+     * 
+     * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+     */
+    @Override
+    protected void onActivityResult(final int request, final int result, final Intent data) {
+        if (result == RESULT_OK && request == RQ_ENABLE_BLUETOOTH) {
+            this.showDeviceDialog();
+        }
+    }
+
+    /**
+     * Always runs when Bluetooth is turned on.
+     * 
+     * Shows a dialog where the user chooses a bluetooth device.
+     */
+    private void showDeviceDialog() {
+        final DeviceDialog dialog = new DeviceDialog();
+        final Bundle bundle = new Bundle();
+        final Set<BluetoothDevice> bondedDevices = this.adapter.getBondedDevices();
+
+        if (bondedDevices.isEmpty()) {
+            bundle.putBoolean("empty", true);
+        } else {
+            final SimpleMap deviceMap = new SimpleMap(bondedDevices.size());
+
+            for (final BluetoothDevice device : bondedDevices) {
+                deviceMap.put(device.getName(), device.getAddress());
+            }
+
+            bundle.putBoolean("empty", false);
+            bundle.putParcelable("devices", deviceMap);
+        }
+
+        dialog.setArguments(bundle);
+        dialog.show(this.getFragmentManager(), "deviceDialog");
+    }
+
+    /**
+     * @see com.rainbowtooth.BluetoothBinder#bind(java.lang.String)
+     */
+    @Override
+    public void bind(final String address) {
+        Log.i("Rainbowtooth", address);
     }
 }
