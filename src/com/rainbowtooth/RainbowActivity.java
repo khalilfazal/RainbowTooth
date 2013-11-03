@@ -23,6 +23,7 @@ import com.rainbowtooth.bluetooth.BluetoothBinder;
 import com.rainbowtooth.bluetooth.DeviceDialog;
 import com.rainbowtooth.bluetooth.SimpleMap;
 import com.rainbowtooth.drawing.AsyncDrawRainbow;
+import com.rainbowtooth.drawing.ImageSetter;
 import com.rainbowtooth.drawing.RainbowTouch;
 
 /**
@@ -30,7 +31,7 @@ import com.rainbowtooth.drawing.RainbowTouch;
  * 
  * @author Khalil Fazal
  */
-public class RainbowActivity extends ActionBarActivity implements BluetoothBinder {
+public class RainbowActivity extends ActionBarActivity implements ImageSetter, BluetoothBinder {
 
     /**
      * Request code to enable Bluetooth.
@@ -86,23 +87,25 @@ public class RainbowActivity extends ActionBarActivity implements BluetoothBinde
         this.progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
         // Run after views get measured
-        this.rainbowView.post(new AsyncDrawRainbow(this.rainbowView, this.progressBar) {
-            @Override
-            protected void onPostExecute(final Void v) {
-                if (RainbowActivity.this.progressBar != null) {
-                    RainbowActivity.this.setRainbow(this.rainbow);
-                }
-            }
-        });
+        this.rainbowView.post(new AsyncDrawRainbow(this.rainbowView, this.progressBar));
+    }
+
+    /**
+     * @see com.rainbowtooth.drawing.ImageSetter#nullProgressBar()
+     */
+    @Override
+    public boolean nullProgressBar() {
+        return this.progressBar == null;
     }
 
     /**
      * Called after the rainbow is created.
      * Insert the rainbow into the {@link ImageView} and set the {@link OnTouchListener}.
      * 
-     * @param rainbow The rainbow that needs to be setup
+     * @see com.rainbowtooth.drawing.ImageSetter#setImage(android.graphics.Bitmap)
      */
-    protected void setRainbow(final Bitmap rainbow) {
+    @Override
+    public void setImage(final Bitmap rainbow) {
         // Dismiss the progress bar
         this.progressBar.dismiss();
 

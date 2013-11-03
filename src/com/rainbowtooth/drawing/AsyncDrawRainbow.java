@@ -16,7 +16,7 @@ import android.view.View;
  * 
  * @author Khalil Fazal
  */
-public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Void> implements Runnable {
+public class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Void> implements Runnable {
 
     /**
      * Where the rainbow is going to be drawn in
@@ -44,6 +44,11 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     private boolean newImage;
 
     /**
+     * Set's up the rainbow after execution
+     */
+    private final ImageSetter rainbowSetter;
+
+    /**
      * Set up the context of the drawing
      * 
      * @param view Where the rainbow is going to be contained in
@@ -51,6 +56,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
      */
     public AsyncDrawRainbow(final View view, final ProgressDialog progress) {
         super(view.getContext(), progress);
+        this.rainbowSetter = (ImageSetter) this.ctx;
         this.view = view;
     }
 
@@ -163,7 +169,11 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
      * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
      */
     @Override
-    protected abstract void onPostExecute(final Void v);
+    protected void onPostExecute(final Void v) {
+        if (!this.rainbowSetter.nullProgressBar()) {
+            this.rainbowSetter.setImage(this.rainbow);
+        }
+    }
 
     /**
      * Save the bitmap to a file
