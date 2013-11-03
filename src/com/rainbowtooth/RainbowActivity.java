@@ -206,7 +206,6 @@ public class RainbowActivity extends ActionBarActivity implements ImageSetter, B
 
     /**
      * When called, assume that Bluetooth is turned on.
-     * 
      * Shows a dialog where the user chooses a bluetooth device.
      */
     private void showDeviceDialog() {
