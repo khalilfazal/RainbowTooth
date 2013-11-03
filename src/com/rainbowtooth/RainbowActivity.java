@@ -2,12 +2,6 @@ package com.rainbowtooth;
 
 import java.util.Set;
 
-import com.rainbowtooth.bluetooth.BluetoothBinder;
-import com.rainbowtooth.bluetooth.DeviceDialog;
-import com.rainbowtooth.bluetooth.SimpleMap;
-import com.rainbowtooth.drawing.AsyncDrawRainbow;
-import com.rainbowtooth.drawing.RainbowTouch;
-
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -24,6 +18,12 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rainbowtooth.bluetooth.BluetoothBinder;
+import com.rainbowtooth.bluetooth.DeviceDialog;
+import com.rainbowtooth.bluetooth.SimpleMap;
+import com.rainbowtooth.drawing.AsyncDrawRainbow;
+import com.rainbowtooth.drawing.RainbowTouch;
 
 /**
  * Shows a rainbow of the HSL spectrum
@@ -73,32 +73,27 @@ public class RainbowActivity extends ActionBarActivity implements BluetoothBinde
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // If there is no adapter, close the Application gracefully.
-        if (this.adapter == null) {
-            this.finish();
-        } else {
-            // Inflate the layout
-            this.setContentView(R.layout.activity_rainbow);
+        // Inflate the layout
+        this.setContentView(R.layout.activity_rainbow);
 
-            // Get the image view
-            this.rainbowView = (ImageView) this.findViewById(R.id.rainbow);
+        // Get the image view
+        this.rainbowView = (ImageView) this.findViewById(R.id.rainbow);
 
-            // Create the progress bar
-            this.progressBar = new ProgressDialog(this);
-            this.progressBar.setTitle(R.string.progressTitle);
-            this.progressBar.setIndeterminate(false);
-            this.progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        // Create the progress bar
+        this.progressBar = new ProgressDialog(this);
+        this.progressBar.setTitle(R.string.progressTitle);
+        this.progressBar.setIndeterminate(false);
+        this.progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
-            // Run after views get measured
-            this.rainbowView.post(new AsyncDrawRainbow(this.rainbowView, this.progressBar) {
-                @Override
-                protected void onPostExecute(final Void v) {
-                    if (RainbowActivity.this.progressBar != null) {
-                        RainbowActivity.this.setRainbow(this.rainbow);
-                    }
+        // Run after views get measured
+        this.rainbowView.post(new AsyncDrawRainbow(this.rainbowView, this.progressBar) {
+            @Override
+            protected void onPostExecute(final Void v) {
+                if (RainbowActivity.this.progressBar != null) {
+                    RainbowActivity.this.setRainbow(this.rainbow);
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -151,14 +146,16 @@ public class RainbowActivity extends ActionBarActivity implements BluetoothBinde
     }
 
     /**
-     * Create the bluetooth menu
+     * Inflate the bluetooth menu
+     * Don't inflate if there is no blueooth adapter
      * 
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
      */
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu
-        this.getMenuInflater().inflate(R.menu.bluetooth, menu);
+        if (this.adapter != null) {
+            this.getMenuInflater().inflate(R.menu.bluetooth, menu);
+        }
 
         return super.onCreateOptionsMenu(menu);
     }
