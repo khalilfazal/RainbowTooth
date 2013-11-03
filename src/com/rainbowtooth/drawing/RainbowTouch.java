@@ -1,4 +1,4 @@
-package com.rainbowtooth;
+package com.rainbowtooth.drawing;
 
 import java.util.Locale;
 
@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
+
+import com.rainbowtooth.R;
 
 /**
  * Event triggered when the rainbow is touched

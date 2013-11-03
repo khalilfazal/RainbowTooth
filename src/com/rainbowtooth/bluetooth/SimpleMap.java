@@ -1,4 +1,4 @@
-package com.rainbowtooth;
+package com.rainbowtooth.bluetooth;
 
 import android.os.Parcel;
 import android.os.Parcelable;

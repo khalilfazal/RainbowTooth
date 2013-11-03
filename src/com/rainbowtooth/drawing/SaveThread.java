@@ -1,4 +1,4 @@
-package com.rainbowtooth;
+package com.rainbowtooth.drawing;
 
 /**
  * Saves the image in a different thread

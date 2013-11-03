@@ -2,6 +2,12 @@ package com.rainbowtooth;
 
 import java.util.Set;
 
+import com.rainbowtooth.bluetooth.BluetoothBinder;
+import com.rainbowtooth.bluetooth.DeviceDialog;
+import com.rainbowtooth.bluetooth.SimpleMap;
+import com.rainbowtooth.drawing.AsyncDrawRainbow;
+import com.rainbowtooth.drawing.RainbowTouch;
+
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -192,7 +198,7 @@ public class RainbowActivity extends ActionBarActivity implements BluetoothBinde
     }
 
     /**
-     * Always runs when Bluetooth is turned on.
+     * When called, assume that Bluetooth is turned on.
      * 
      * Shows a dialog where the user chooses a bluetooth device.
      */
@@ -219,7 +225,7 @@ public class RainbowActivity extends ActionBarActivity implements BluetoothBinde
     }
 
     /**
-     * @see com.rainbowtooth.BluetoothBinder#bind(java.lang.String)
+     * @see com.rainbowtooth.bluetooth.BluetoothBinder#bind(java.lang.String)
      */
     @Override
     public void bind(final String address) {

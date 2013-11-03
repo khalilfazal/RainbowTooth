@@ -1,4 +1,4 @@
-package com.rainbowtooth;
+package com.rainbowtooth.drawing;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -85,7 +85,7 @@ public abstract class AsyncDrawRainbow extends AbstractAsyncProgress<Integer, Vo
     }
 
     /**
-     * @see com.rainbowtooth.AbstractAsyncProgress#showProgress()
+     * @see com.rainbowtooth.drawing.AbstractAsyncProgress#showProgress()
      */
     @Override
     protected boolean showProgress() {

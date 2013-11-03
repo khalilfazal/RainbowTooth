@@ -1,4 +1,4 @@
-package com.rainbowtooth;
+package com.rainbowtooth.drawing;
 
 import android.graphics.Color;
 

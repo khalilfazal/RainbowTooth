@@ -1,9 +1,11 @@
-package com.rainbowtooth;
+package com.rainbowtooth.drawing;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+
+import com.rainbowtooth.R;
 
 /** 
  * Asynchronously perform a task with a progress bar
