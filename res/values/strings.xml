@@ -4,8 +4,14 @@
     <string name="app_name">RainbowTooth</string>
     <string name="progressTitle">Drawing</string>
     <string name="rainbowDesc">HSL Rainbow</string>
-    <string name="placeholder"> </string>
-    <string name="empty"></string>
-    <string name="format" formatted="false">%03d %03d %03d</string>
     
+    <!-- Special Strings -->
+    <string name="placeholder"></string>
+    <string name="empty"></string>
+    
+    <!--  String Constants -->
+    <string name="format" formatted="false">%03d %03d %03d</string>
+
+    <!-- Options Menu -->
+    <string name="connect">Connect to Device</string>
 </resources>

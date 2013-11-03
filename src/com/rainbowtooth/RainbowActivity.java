@@ -1,11 +1,12 @@
 package com.rainbowtooth;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
@@ -16,7 +17,7 @@ import android.widget.TextView;
  * 
  * @author Khalil Fazal
  */
-public class RainbowActivity extends Activity {
+public class RainbowActivity extends ActionBarActivity {
 
     /**
      * The rainbow
@@ -108,5 +109,18 @@ public class RainbowActivity extends Activity {
 
         // Set the rainbow touch listener
         this.rainbowView.setOnTouchListener(new RainbowTouch(message, rainbow, border, paint));
+    }
+
+    /**
+     * Create the bluetooth menu
+     * 
+     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     */
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        // Inflate the menu
+        this.getMenuInflater().inflate(R.menu.bluetooth, menu);
+
+        return super.onCreateOptionsMenu(menu);
     }
 }
