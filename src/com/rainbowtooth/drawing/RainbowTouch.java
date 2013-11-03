@@ -1,5 +1,8 @@
 package com.rainbowtooth.drawing;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.Locale;
 
 import android.graphics.Bitmap;
@@ -14,13 +17,14 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 import com.rainbowtooth.R;
+import com.rainbowtooth.bluetooth.Streamer;
 
 /**
  * Event triggered when the rainbow is touched
  * 
  * @author Khalil Fazal
  */
-public class RainbowTouch implements OnTouchListener {
+public class RainbowTouch implements OnTouchListener, Streamer {
 
     /**
      * Where to show the selected colour
@@ -48,6 +52,11 @@ public class RainbowTouch implements OnTouchListener {
     private final Paint paint;
 
     /**
+     * Used to send the selected colour to
+     */
+    private OutputStream socketStream;
+
+    /**
      * @param message Where to display the colour of the touched pixel
      * @param rainbow The bitmap used to find colors of pixels    
      * @param border that must be redrawn when it's colour changes
@@ -61,6 +70,14 @@ public class RainbowTouch implements OnTouchListener {
         this.paint = paint;
     }
 
+    /**
+     * @see com.rainbowtooth.bluetooth.Streamer#setStream(java.io.OutputStream)
+     */
+    @Override
+    public void setStream(final OutputStream stream) {
+        this.socketStream = stream;
+    }
+
     /** 
      * @see android.view.View.OnTouchListener#onTouch(android.view.View, android.view.MotionEvent)
      */
@@ -71,6 +88,15 @@ public class RainbowTouch implements OnTouchListener {
 
             // Set the border's colour
             this.paint.setColor(pixel);
+
+            // Send the colour to the device
+            if (this.socketStream != null) {
+                try {
+                    final ByteBuffer buffer = ByteBuffer.allocate(4);
+                    buffer.putInt(pixel);
+                    this.socketStream.write(buffer.array());
+                } catch (final IOException e) {}
+            }
 
             // Redraw the border
             this.border.invalidate();

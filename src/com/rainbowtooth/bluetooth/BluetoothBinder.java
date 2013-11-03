@@ -1,5 +1,6 @@
 package com.rainbowtooth.bluetooth;
 
+
 /**
  * Creates a bluetooth socket from a bluetooth device's MAC address
  * 

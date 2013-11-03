@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rainbowtooth.bluetooth.BluetoothBinder;
+import com.rainbowtooth.bluetooth.ConnectTask;
 import com.rainbowtooth.bluetooth.DeviceDialog;
 import com.rainbowtooth.bluetooth.SimpleMap;
 import com.rainbowtooth.drawing.AsyncDrawRainbow;
@@ -57,6 +58,11 @@ public class RainbowActivity extends ActionBarActivity implements ImageSetter, B
      * The rainbow that will be shown to the user
      */
     protected Bitmap rainbow;
+
+    /**
+     * Listens for touch events on the rainbow
+     */
+    private RainbowTouch touchListener;
 
     /**
      * Construct the activity
@@ -129,7 +135,8 @@ public class RainbowActivity extends ActionBarActivity implements ImageSetter, B
         border.setBackground(background);
 
         // Set the rainbow touch listener
-        this.rainbowView.setOnTouchListener(new RainbowTouch(message, rainbow, border, paint));
+        this.touchListener = new RainbowTouch(message, rainbow, border, paint);
+        this.rainbowView.setOnTouchListener(this.touchListener);
     }
 
     /**
@@ -230,5 +237,7 @@ public class RainbowActivity extends ActionBarActivity implements ImageSetter, B
     @Override
     public void bind(final String address) {
         Log.i("Rainbowtooth", address);
+        final BluetoothDevice device = this.adapter.getRemoteDevice(address);
+        new ConnectTask(this, this.touchListener).execute(device);
     }
 }
