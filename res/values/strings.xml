@@ -11,5 +11,7 @@
 
     <!-- Options Menu -->
     <string name="connect">Connect to Device</string>
+    <string name="chooserTitle">Choose a Bluetooth Device</string>
+    <string name="noDevices">No paired Bluetooth devices in range</string>
 
 </resources>
