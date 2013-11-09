@@ -6,7 +6,7 @@
     <string name="rainbowDesc">HSL Rainbow</string>
 
     <!-- String Constants -->
-    <string name="empty" translatable="false"></string>
+    <string name="blank" translatable="false"></string>
     <string name="format" formatted="false" translatable="false">%03d %03d %03d</string>
 
     <!-- Options Menu -->

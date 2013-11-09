@@ -41,7 +41,7 @@ public abstract class AbstractAsyncProgress<Params, Result> extends AsyncTask<Pa
         this.ctx = ctx;
         this.resource = ctx.getResources();
         this.progressBar = progress;
-        this.progressBar.setProgressNumberFormat(this.getText(R.string.empty));
+        this.progressBar.setProgressNumberFormat(this.getText(R.string.blank));
     }
 
     /**
