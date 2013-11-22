@@ -60,7 +60,6 @@ public class RainbowTouch implements OnTouchListener, Streamer {
         this.messageBox = message;
         this.rainbow = rainbow;
         this.format = message.getContext().getResources().getText(R.string.format).toString();
-        this.border = border;
         this.paint = paint;
     }
 
@@ -84,7 +83,7 @@ public class RainbowTouch implements OnTouchListener, Streamer {
             this.paint.setColor(pixel);
 
             // Redraw the border
-            this.border.invalidate();
+            this.messageBox.invalidate();
 
             // Send the colour to the device
             if (this.socketStream != null) {
@@ -105,7 +104,7 @@ public class RainbowTouch implements OnTouchListener, Streamer {
             text.setSpan(new ForegroundColorSpan(Color.rgb(0, green, 0)), 4, 7, 0);
             text.setSpan(new ForegroundColorSpan(Color.rgb(0, 0, blue)), 8, 11, 0);
 
-            this.message.setText(text, BufferType.SPANNABLE);
+            this.messageBox.setText(text, BufferType.SPANNABLE);
         } catch (final IllegalArgumentException e) {
             //Log.e(this.getClass().toString(), "exception", e);
             return false;
