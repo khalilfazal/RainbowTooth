@@ -14,7 +14,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -119,7 +118,7 @@ public class RainbowActivity extends ActionBarActivity implements ImageSetter, B
         this.rainbowView.setImageBitmap(rainbow);
 
         // Get the TextView for where the touched colour should appear
-        final TextView message = (TextView) this.findViewById(R.id.message);
+        final TextView messageBox = (TextView) this.findViewById(R.id.message);
 
         // Create a new background
         final ShapeDrawable background = new ShapeDrawable();
@@ -131,11 +130,10 @@ public class RainbowActivity extends ActionBarActivity implements ImageSetter, B
         paint.setColor(0x00000000);
 
         // Set the empty view's background
-        final View border = this.findViewById(R.id.border);
-        border.setBackground(background);
+        messageBox.setBackground(background);
 
         // Set the rainbow touch listener
-        this.touchListener = new RainbowTouch(message, rainbow, border, paint);
+        this.touchListener = new RainbowTouch(messageBox, rainbow, paint);
         this.rainbowView.setOnTouchListener(this.touchListener);
     }
 

@@ -29,7 +29,7 @@ public class RainbowTouch implements OnTouchListener, Streamer {
     /**
      * Where to show the selected colour
      */
-    private final TextView message;
+    private final TextView messageBox;
 
     /**
      * A (Point -> Colour) map
@@ -40,11 +40,6 @@ public class RainbowTouch implements OnTouchListener, Streamer {
      * The string's format
      */
     private final String format;
-
-    /**
-     * Must be redrawn when it's colour changes
-     */
-    private final View border;
 
     /**
      * The boarder's painter
@@ -59,11 +54,10 @@ public class RainbowTouch implements OnTouchListener, Streamer {
     /**
      * @param message Where to display the colour of the touched pixel
      * @param rainbow The bitmap used to find colors of pixels    
-     * @param border that must be redrawn when it's colour changes
      * @param paint the boarder's painter
      */
-    public RainbowTouch(final TextView message, final Bitmap rainbow, final View border, final Paint paint) {
-        this.message = message;
+    public RainbowTouch(final TextView message, final Bitmap rainbow, final Paint paint) {
+        this.messageBox = message;
         this.rainbow = rainbow;
         this.format = message.getContext().getResources().getText(R.string.format).toString();
         this.border = border;
