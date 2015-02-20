@@ -1,8 +1,7 @@
 RainbowTooth
 ============
 
-Android Application for drawing an <a href="https://en.wikipedia.org/wiki/HLS_color_space">HSL</a> Rainbow.
-Can connect to a Bluetooth device to send selected colours as data.
+With this application, you can send colour as represented in the <a href="https://en.wikipedia.org/wiki/HLS_color_space">HSL colour space</a> to a remote Bluetooth device.
 
 Dependancies
 ------------
